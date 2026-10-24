@@ -1,5 +1,5 @@
 {
-    "name": "dewall88/bancontactpro",
+    "name": "yvebrecht/bancontactpro",
     "description": "Unofficial PHP client for the Bancontact Pro payment, refund and reconciliation APIs.",
     "type": "library",
     "keywords": ["bancontact", "bancontact pro", "payment", "refund", "reconciliation", "payconiq"],

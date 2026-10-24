@@ -13,7 +13,7 @@ Verzin geen Bancontact-gedrag. Elke gedragsbeslissing verwijst naar een document
 
 - Synchroon, PSR-18 (`ClientInterface`) + PSR-17; standaard via `php-http/discovery`. JWKS-cache optioneel via PSR-16 (nodig omdat PHP-FPM geen geheugen deelt tussen requests). Logging via PSR-3.
 - `declare(strict_types=1)`, PHP >= 8.2, `readonly` klassen, backed enums, PHPStan level max, PSR-12/PER-CS via php-cs-fixer. Namespace `BancontactPro\`, `camelCase` eigenschappen.
-- Pakketnaam `dewall88/bancontactpro` (nog niet gereserveerd op Packagist).
+- Pakketnaam `yvebrecht/bancontactpro` (nog niet gereserveerd op Packagist).
 - Versie: major.minor loopt gelijk met alle taalversies (nu 0.2); patch en prerelease zijn vrij per taal. SemVer-formaat `0.2.0-preview.1`, enige bron `src/Version.php`; git-tags `v0.2.0-preview.1`. Geen `version` in composer.json (Packagist leest tags).
 - Modellen zijn `final readonly` klassen; `Json\Hydrator` bouwt responses uit de constructor-signatuur (lijsten via `#[ListOf]`), `Json\Serializer` maakt request-JSON. Ongezette optionele velden worden weggelaten, nooit als `null` verstuurd. Onbekende enumwaarden crashen niet: het veld heeft type `Enum|string` en bevat de ruwe string als de waarde onbekend is.
 - Credentials worden per aanroep gelezen (`ClientFactory`, provider = `callable(): Credentials`) en nooit gecachet; een client is gebonden aan één product.
