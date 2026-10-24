@@ -54,7 +54,7 @@ final class SignatureVerifier
         }
 
         // Defends against a validly signed message being replayed against the wrong route.
-        if ($claimedPath !== $path) {
+        if (!self::signedPathMatches($claimedPath, $path)) {
             return null;
         }
 
@@ -79,5 +79,25 @@ final class SignatureVerifier
         }
 
         return new JoseHeader($kid, $sub, $iss, $issuedAt, $jti, $claimedPath);
+    }
+
+    /**
+     * Whether the signed `path` claim names the endpoint that received the callback. The docs call the claim a path, but
+     * Bancontact signs the callback URL the merchant registered (observed on a real preprod callback:
+     * `https://host/bancontact/callback`), so a claim that is an absolute http(s) URL matches when its path equals the
+     * received path. A plain path is compared as it is. The host is not compared: an application behind a proxy cannot rely
+     * on the host it sees, and the path is what stops a callback for one endpoint being replayed to another.
+     */
+    private static function signedPathMatches(string $claim, string $path): bool
+    {
+        if ($claim === $path) {
+            return true;
+        }
+        $parts = parse_url($claim);
+
+        return is_array($parts)
+            && in_array($parts['scheme'] ?? '', ['http', 'https'], true)
+            && isset($parts['host'])
+            && ($parts['path'] ?? '') === $path;
     }
 }
