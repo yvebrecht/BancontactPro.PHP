@@ -81,7 +81,7 @@ handle($callback->payload->status, $callback->requestId); // requestId (jti) is 
 http_response_code(200);
 ```
 
-Antwoord pas met `200` na verificatie en verwerking. Bancontact herhaalt callbacks met identieke inhoud, dus verwerk idempotent (zie ook BancontactPro.Net#50).
+Antwoord pas met `200` na verificatie en verwerking. Bancontact herhaalt callbacks met identieke inhoud, dus verwerk idempotent (zie ook BancontactPro.Net#9).
 
 PHP-FPM deelt geen geheugen tussen requests. Geef daarom een PSR-16-cache mee (`new ClientFactory($credentials, cache: $cache)`), anders wordt de JWKS bij elke callback opnieuw opgehaald. De sleutels worden hoogstens 12 uur bewaard en opnieuw opgehaald bij een onbekende `kid`.
 

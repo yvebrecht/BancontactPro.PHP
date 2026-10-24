@@ -111,7 +111,7 @@ final class ContractTest extends TestCase
 
     /**
      * (spec, schema, model class, spec properties deliberately not modelled)
-     * totalAmount: listed as required but never defined (BancontactPro.Net#28). voucherEligibility: deprecated.
+     * totalAmount: listed as required but never defined (BancontactPro.Net#4). voucherEligibility: deprecated.
      *
      * @return iterable<string, array{string, string, class-string, list<string>}>
      */

@@ -1,6 +1,6 @@
 # BancontactPro.PHP
 
-Idiomatische PHP-client voor de Bancontact Pro-API's (Payment, Refund, Reconciliation). Geen officieel Bancontact-project. Epic: yvebrecht/BancontactPro.PHP#19.
+Idiomatische PHP-client voor de Bancontact Pro-API's (Payment, Refund, Reconciliation). Geen officieel Bancontact-project.
 
 ## Bronnen in volgorde van gezag
 
@@ -34,5 +34,5 @@ Met een lokale PHP: `composer install && composer check` (php-cs-fixer dry-run, 
 ## Status en grenzen
 
 - De repo staat onder Apache-2.0 (LICENSE en NOTICE, copyright Axel Dewaele). Het project is onafhankelijk en maakt geen aanspraak op de merken Bancontact of Bancontact Pro (zie NOTICE). **Er wordt niets gepubliceerd (Packagist, tags, releases) zonder uitdrukkelijk akkoord.**
-- Open punten bij Bancontact: zie BancontactPro.Net#48-#51 (`..` in de Signature, scheiding in de signing input, callback-retries, callback-headerclaims).
+- Open punten bij Bancontact: zie BancontactPro.Net#1, #2, #9 en #10 (`..` in de Signature, scheiding in de signing input, callback-retries, callback-headerclaims).
 - Commit klein en regelmatig op een featurebranch, met het Gmail-adres (zie geheugen), nooit met het werkadres. Niet pushen of publiceren zonder verzoek.

@@ -14,7 +14,7 @@ use RuntimeException;
  * The compact form has an empty payload segment: `base64url(header) . ".." . base64url(signature)`, where the
  * signature covers `base64url(header) . "." . base64url(body)`. The separator in the signing input is not stated by
  * Bancontact's callback guide (it writes `+`); `.` is the RFC 7797 convention and is an open item to confirm with
- * devsupport@bancontact.com against a real sample (BancontactPro.Net#48, #49). The header carries five custom claims
+ * devsupport@bancontact.com against a real sample (BancontactPro.Net#1, #2). The header carries five custom claims
  * under a `https://payconiq.com/` namespace, all listed in `crit`.
  */
 final class DetachedJws
