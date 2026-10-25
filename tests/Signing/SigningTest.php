@@ -149,6 +149,40 @@ final class SigningTest extends TestCase
         self::assertNull($ok->verify($jws, 'body', '/callback/'));
     }
 
+    /** @return iterable<string, array{string, string, bool}> */
+    public static function pathClaims(): iterable
+    {
+        yield 'https url' => ['https://shop.example/callback', '/callback', true];
+        yield 'http url' => ['http://shop.example/callback', '/callback', true];
+        yield 'url, other path' => ['https://shop.example/other', '/callback', false];
+        yield 'other scheme' => ['ftp://shop.example/callback', '/callback', false];
+        yield 'plain path' => ['/callback', '/callback', true];
+    }
+
+    #[DataProvider('pathClaims')]
+    public function testPathClaimMayBeTheCallbackUrl(string $claim, string $received, bool $expected): void
+    {
+        $header = new JoseHeader('kid-1', 'ppid-1', 'Payconiq', new DateTimeImmutable('2026-01-02T03:04:05.678Z', new DateTimeZone('UTC')), 'jti-1', $claim);
+        $jws = DetachedJws::sign($header, 'body', $this->key);
+
+        self::assertSame($expected, $this->verifier(TestKeys::publicOf($this->key))->verify($jws, 'body', $received) !== null);
+    }
+
+    public function testRealPreprodCallbackVerifies(): void
+    {
+        // Captured from Bancontact's preprod on 2026-10-24 and checked with the public key of https://jwks.preprod.bancontact.net/ :
+        // header..signature, a path claim that is the callback URL, signing input header + '.' + base64url(body).
+        $public = Keys::fromJwk(['kty' => 'EC', 'crv' => 'P-256', 'x' => 'QXagknFz-0HTQGL-jISbuOdPFP4561SmbmHm2y14HEg', 'y' => '0XJYHdztagEf-qFj1_lnE1HAqp5LkMDskW4hbhnKiII']);
+        self::assertNotNull($public);
+        $signature = 'eyJjcml0IjpbImh0dHBzOi8vcGF5Y29uaXEuY29tL2lzcyIsImh0dHBzOi8vcGF5Y29uaXEuY29tL2lhdCIsImh0dHBzOi8vcGF5Y29uaXEuY29tL3N1YiIsImh0dHBzOi8vcGF5Y29uaXEuY29tL3BhdGgiLCJodHRwczovL3BheWNvbmlxLmNvbS9qdGkiXSwiaHR0cHM6Ly9wYXljb25pcS5jb20vaXNzIjoiUGF5Y29uaXEiLCJraWQiOiJjMzBmNDE0ZC04NTVmLTQ3OTEtOTc1ZC1mNmQ5ZjNkMjNlNDIiLCJodHRwczovL3BheWNvbmlxLmNvbS9pYXQiOiIyMDI2LTEwLTI0VDIyOjI1OjIzLjE4NVoiLCJ0eXAiOiJKT1NFK0pTT04iLCJodHRwczovL3BheWNvbmlxLmNvbS9zdWIiOiI3eGt5ZGpiYzluZ2dzeWtjZzVzaDBhYnMiLCJodHRwczovL3BheWNvbmlxLmNvbS9wYXRoIjoiaHR0cHM6Ly9iYW5jb250YWN0LXByZXByb2Qub3MtbGFuLmJlL2JhbmNvbnRhY3QvY2FsbGJhY2siLCJodHRwczovL3BheWNvbmlxLmNvbS9qdGkiOiI4MTM4OWVhNS1lZDRlLTQyZTMtODkwYy0xNjExMjkyZWNiOTYiLCJhbGciOiJFUzI1NiJ9..rqZVQYddn67bBOG7iej3jAYwMpT-6R3mI_Ar7npJwHfYLd8iGmKw62on21guVo9XGveBJBd8ApVGPTcZSr78Hg';
+        $body = '{"paymentId":"tx668ldrz9fgg4ararakc62r","currency":"EUR","amount":100,"createdAt":"2026-10-24T22:08:10.040086Z","status":"SUCCEEDED","debtor":{"iban":"************7034","name":"Axel Dewaele"},"description":"sample payment","expireAt":"2026-10-24T22:10:10.040086Z","succeededAt":"2026-10-24T22:08:28.514776Z"}';
+
+        $claims = $this->verifier($public, 'c30f414d-855f-4791-975d-f6d9f3d23e42')->verify($signature, $body, '/bancontact/callback');
+
+        self::assertNotNull($claims);
+        self::assertSame('Payconiq', $claims->issuer);
+        self::assertSame('81389ea5-ed4e-42e3-890c-1611292ecb96', $claims->requestId);
+    }
     public function testVerifierRejectsUnrecognisedCriticalExtension(): void
     {
         $jws = DetachedJws::sign(self::header(), 'body', $this->key);
