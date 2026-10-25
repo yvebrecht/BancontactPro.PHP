@@ -4,7 +4,7 @@
 
 Een PHP-client voor de [Bancontact Pro](https://docs.bancontactpro.com/)-API's: Payment, Refund en Reconciliation, met request-signing, verificatie van callbacks via JWKS en QR-/deeplinkgeneratie.
 
-> **Status: in ontwikkeling, nog niet gepubliceerd en nog niet getest tegen Bancontact zelf.** Alles is getest met gemockte HTTP. Het pakket staat nog niet op Packagist en de naam `dewall88/bancontactpro` is nog niet gereserveerd. De bibliotheek is gebouwd op de documentatie en specs van Bancontact, niet als port van een andere taalversie.
+> **Status: in ontwikkeling, nog niet gepubliceerd en nog niet getest tegen Bancontact zelf.** Alles is getest met gemockte HTTP. Het pakket staat nog niet op Packagist en de naam `yvebrecht/bancontactpro` is nog niet gereserveerd. De bibliotheek is gebouwd op de documentatie en specs van Bancontact, niet als port van een andere taalversie.
 
 ## Vereisten
 
